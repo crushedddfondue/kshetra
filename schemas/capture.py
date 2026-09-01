@@ -1,22 +1,19 @@
 from enum import StrEnum
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
-@dataclass
 class CaptureSource(StrEnum):
-  android_arcore: object
-  ios_arkit: object
-  dslr: object
-  video: object
+  android_arcore = "android_arcore"
+  ios_arkit = "ios_arkit"
+  dslr = "dslr"
+  video = "video"
 
-@dataclass
 class ScaleMethod(StrEnum):
-  vio: Any
-  lidar: Any
-  arcore_depth: Any  
-  scale_reference: Any  
-  floorplan: Any 
+  vio = "vio"
+  lidar = "lidar"
+  arcore_depth = "arcore_depth"  
+  scale_reference = "scale_reference"  
+  floorplan = "floorplan" 
 
 @dataclass
 class Intrinsics:
