@@ -19,8 +19,11 @@ def write_ply(path: Path, points: np.ndarray, colours: np.ndarray | None = None)
 
     if colours.ndim != 2 or colours.shape[1] != 3:
       raise ValueError(f"Expected Shape: (N, 3); Got: {tuple(points.shape)}")
+
+    if len(colours) != len(points):
+      raise ValueError(f"colours length {len(colours)} does not match points length {len(points)}")
     
-    if not np.issubdtype(points.dtype, np.uint8):
+    if not np.issubdtype(points.dtype, np.integer):
       raise ValueError("points must contain integer values")
 
   path = Path(path)
@@ -46,7 +49,7 @@ def write_ply(path: Path, points: np.ndarray, colours: np.ndarray | None = None)
         f.write(f"{x:.9g} {y:.9g} {z:.9g}\n")
     else:
       for (x, y, z), (r, g, b) in zip(points, colours):
-        f.write(f"{x:.9g} {y:.9g} {z:.9g} {r} {g} {b}\n")
+        f.write(f"{x:.9g} {y:.9g} {z:.9g} {int(r)} {int(g)} {int(b)}\n")
 
 def read_ply(path: Path) -> np.ndarray:
   path = Path(path)
@@ -55,9 +58,7 @@ def read_ply(path: Path) -> np.ndarray:
     raise FileExistsError(path)
 
   with path.open("r", encoding="ascii") as f:
-    first_line = f.readline().strip()
-
-    if first_line != "ply":
+    if f.readline().strip() != "ply":
       raise ValueError("Invalid PLY header: missing 'ply'")
 
     vertex_count: int | None = None
@@ -81,7 +82,6 @@ def read_ply(path: Path) -> np.ndarray:
 
       elif line.startswith("property "):
         parts = line.split()
-
         if len(parts) >= 3:
           properties.append(parts[-1])
 
@@ -102,8 +102,10 @@ def read_ply(path: Path) -> np.ndarray:
   if len(properties) < 3:
     raise ValueError("PLY contains fewer than 3 vertex properties")
 
-  if properties[:3] != ["x", "y", "z"]:
+  if len(properties) < 3 or properties[:3] != ["x", "y", "z"]:
     raise ValueError("PLY must contain x, y, z as the first vertex properties")
+
+  points = np.empty((vertex_count, 3), dtype=np.float64)
 
   with path.open("r", encoding="ascii") as f:
     for line in f:
@@ -115,24 +117,20 @@ def read_ply(path: Path) -> np.ndarray:
     for index in range(vertex_count):
       line = f.readline()
       if not line:
-        raise ValueError(
-          f"Unexpected end of file: expected {vertex_count} vertices, "
-          f"got {index}"
-        )
+        raise ValueError(f"Unexpected end of file: expected {vertex_count} vertices, got {index}")
 
       parts = line.split()
-
       if len(parts) < 3:
         raise ValueError(f"Invalid vertex data at index {index}")
 
       try:
-        x, y, z = map(float, parts[:3])
+        xyz = (float(parts[0]), float(parts[1]), float(parts[2]))
       except ValueError as exc:
         raise ValueError(f"Invalid vertex coordinates at index {index}") from exc
 
-      if not np.isfinite([x, y, z]).all():
+      if not np.isfinite(xyz).all():
         raise ValueError(f"Non-finite vertex coordinates at index {index}")
 
-      points.append((x, y, z))
+      points[index] = xyz
 
   return np.asarray(points, dtype=np.float32)
