@@ -6,14 +6,14 @@ from capture import ScaleMethod
 @dataclass
 class ScaleReport:
   method: ScaleMethod
-  scale: int
+  scale: float
   confidence: float
   notes: str | None
 
 @dataclass
 class Reconstruction:
-  reconstruction_id: int
-  bundle_id: int
+  reconstruction_id: str
+  bundle_id: str
   created_at: datetime
   point_cloud_path: str
   num_points: int
