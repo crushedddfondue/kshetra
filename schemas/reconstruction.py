@@ -14,8 +14,11 @@ class ScaleReport:
 class Reconstruction:
   reconstruction_id: str
   bundle_id: str
+
   created_at: datetime
   point_cloud_path: str
+
   num_points: int
+  
   scale: ScaleReport
   notes: str | None

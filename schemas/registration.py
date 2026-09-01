@@ -1,21 +1,25 @@
 from enum import StrEnum
 from datetime import datetime
 from dataclasses import dataclass
-from typing import Any
 
 class RegistrationMethod(StrEnum):
-  geometric: Any
-  floorplan: Any
-  fiducial: Any
+  geometric = "geometric"
+  floorplan = "floorplan"
+  fiducial = "fiducial"
 
 @dataclass
 class RegistrationResult:
-  method: str
-  source_id: int
-  target_id: int
+  method: RegistrationMethod
+
+  source_id: str
+  target_id: str
+
   transform: list[float]
-  error_m: int
+
+  error_m: float
   confidence: float
-  inliner_ratio: float
+  inlier_ratio: float
+
   iterations: int
+  
   created_at: datetime
