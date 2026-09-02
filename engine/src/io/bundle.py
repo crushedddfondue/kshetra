@@ -5,8 +5,8 @@ from dataclasses import asdict
 
 import numpy as np
 
-from engine.src.io.ply import read_ply
-from engine.src.schema.capture import (
+from src.io.ply import read_ply
+from src.schema.capture import (
   CaptureBundle, 
   Intrinsics,
   CameraPose,

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from engine.src.schema.capture import ScaleMethod
+from src.schema.capture import ScaleMethod
 
 @dataclass
 class ScaleReport:

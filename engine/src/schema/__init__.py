@@ -1,4 +1,4 @@
-from engine.src.schema.capture import (
+from src.schema.capture import (
   CaptureSource,
   ScaleMethod,
   Intrinsics,
@@ -8,15 +8,15 @@ from engine.src.schema.capture import (
   CaptureBundle
 )
 
-from engine.src.schema.change import (
+from src.schema.change import (
   ChangeKind,
   ChangeRegion,
   ChangeReport
 )
 
-from engine.src.schema.reconstruction import ScaleReport, Reconstruction
+from src.schema.reconstruction import ScaleReport, Reconstruction
 
-from engine.src.schema.registration import RegistrationMethod, RegistrationResult
+from src.schema.registration import RegistrationMethod, RegistrationResult
 
 __all__ = [
   # Capture

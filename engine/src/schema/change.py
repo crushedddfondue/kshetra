@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
 
-from engine.src.schema.registration import RegistrationResult
+from src.schema.registration import RegistrationResult
 
 
 class ChangeKind(StrEnum):
